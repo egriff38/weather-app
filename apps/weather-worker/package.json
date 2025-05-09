@@ -1,0 +1,23 @@
+{
+  "name": "weather-worker",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/handler.ts --format=esm",
+    "zip": "zip -j lambda.zip dist/index.js",
+    "update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name weather-worker",
+    "deploy": "run-s build zip update",
+    "dev": "tsx watch src/dev.ts"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.14.1",
+    "esbuild": "^0.21.4",
+    "npm-run-all2": "^6.2.0",
+    "tsx": "^4.19.4"
+  },
+  "dependencies": {
+    "hono": "^4.7.8"
+  }
+}
