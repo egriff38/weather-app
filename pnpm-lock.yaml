@@ -13,6 +13,9 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.3)
+      weather-client:
+        specifier: workspace:*
+        version: link:../../packages/weather-client
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^5.2.3
@@ -35,10 +38,19 @@ importers:
       hono:
         specifier: ^4.7.8
         version: 4.7.8
+      openweather-api-node:
+        specifier: ^3.1.5
+        version: 3.1.5
     devDependencies:
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.8)
+      '@types/node':
+        specifier: ^22.15.17
+        version: 22.15.17
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
       esbuild:
         specifier: ^0.21.4
         version: 0.21.5
@@ -48,6 +60,16 @@ importers:
       tsx:
         specifier: ^4.19.4
         version: 4.19.4
+
+  packages/weather-client:
+    dependencies:
+      hono:
+        specifier: ^4.7.8
+        version: 4.7.8
+    devDependencies:
+      weather-worker:
+        specifier: workspace:*
+        version: link:../../apps/weather-worker
 
 packages:
 
@@ -561,6 +583,10 @@ packages:
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
 
+  dotenv@16.5.0:
+    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
+    engines: {node: '>=12'}
+
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
@@ -636,6 +662,9 @@ packages:
     resolution: {integrity: sha512-tkyb4pc0Zb0oOswCb5tORPk9MvVL6gcDq1cMItQHmsbVk1skk7YF6cH+UU2GxeNLHMuk6wFEOSmEmJ2cnAK1jg==}
     engines: {node: ^14.18.0 || ^16.13.0 || >=18.0.0, npm: '>= 8'}
     hasBin: true
+
+  openweather-api-node@3.1.5:
+    resolution: {integrity: sha512-FGLE0bWOTvp4XHaswmzMfisYMMEtwEwOEJR0vaS07L31OUcutV/UUO5/vRuktkRPoqfk3KZOoqddsRTGTxT7Aw==}
 
   path-browserify@1.0.1:
     resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
@@ -1002,7 +1031,6 @@ snapshots:
   '@types/node@22.15.17':
     dependencies:
       undici-types: 6.21.0
-    optional: true
 
   '@vitejs/plugin-vue@5.2.3(vite@6.3.5(@types/node@22.15.17)(tsx@4.19.4))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
@@ -1118,6 +1146,8 @@ snapshots:
 
   de-indent@1.0.2: {}
 
+  dotenv@16.5.0: {}
+
   entities@4.5.0: {}
 
   esbuild@0.21.5:
@@ -1222,6 +1252,8 @@ snapshots:
       shell-quote: 1.8.2
       which: 3.0.1
 
+  openweather-api-node@3.1.5: {}
+
   path-browserify@1.0.1: {}
 
   path-key@3.1.1: {}
@@ -1295,8 +1327,7 @@ snapshots:
 
   typescript@5.8.3: {}
 
-  undici-types@6.21.0:
-    optional: true
+  undici-types@6.21.0: {}
 
   vite@6.3.5(@types/node@22.15.17)(tsx@4.19.4):
     dependencies:

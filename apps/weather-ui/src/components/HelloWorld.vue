@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from "vue";
+import { useWebClient } from "@/providers/apiClientProvider";
 
-defineProps<{ msg: string }>()
+defineProps<{ msg: string }>();
 
-const count = ref(0)
+const serverMsg = ref<string>();
+const {
+  index: { $get: getHello },
+} = useWebClient();
+onMounted(async () => {
+  const res = await getHello();
+  serverMsg.value = await res.text();
+});
+
+const count = ref(0);
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
+  <h2 v-if="serverMsg">{{ serverMsg }}</h2>
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
