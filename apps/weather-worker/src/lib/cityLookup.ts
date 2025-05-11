@@ -11,11 +11,11 @@ export class CityLookup {
         zipCode: cityOrZip,
       });
       if (res) {
-        return [new City(res, this.ow)];
+        return [new City(res)];
       }
     }
     const res = await this.ow.getAllLocations(cityOrZip, {});
-    return res.map((city) => new City(city, this.ow));
+    return res.map((city) => new City(city));
   }
   async getCity(opts: Options) {
     const res = await this.ow.getLocation(opts);
@@ -23,7 +23,7 @@ export class CityLookup {
       throw new HTTPException(404, {
         message: "City not found",
       });
-    return new City(res, this.ow);
+    return new City(res);
   }
   static isZip(cityOrZip: string) {
     return /^\d{5}$/.test(cityOrZip);
@@ -31,14 +31,29 @@ export class CityLookup {
 }
 
 export class City {
-  constructor(
-    public readonly location: Location,
-    private readonly ow: OpenWeatherAPI = useWeatherService()
-  ) {}
+  readonly name: string;
+  readonly country: string;
+  readonly state?: string;
+  readonly coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  constructor(location: Location) {
+    this.name = location.name;
+    this.country = location.country;
+    this.state = location.state;
+    this.coordinates = {
+      latitude: location.lat,
+      longitude: location.lon,
+    };
+  }
 
-  async getWeather() {
-    const res = await this.ow.getForecast(1, {
-      coordinates: this.location,
+  async getWeather(ow: OpenWeatherAPI = useWeatherService()) {
+    const res = await ow.getForecast(1, {
+      coordinates: {
+        lat: this.coordinates.latitude,
+        lon: this.coordinates.longitude,
+      },
     });
     return res[0];
   }

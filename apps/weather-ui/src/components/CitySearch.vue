@@ -56,11 +56,7 @@ const searchCities = async (query: string, signal?: AbortSignal) => {
       return;
     }
 
-    searchResults.value = data.map((city) => ({
-      name: city.location.name,
-      country: city.location.country,
-      state: city.location.state,
-    }));
+    searchResults.value = data;
     selectedIndex.value = -1;
     await maintainFocus();
   } catch (error) {
