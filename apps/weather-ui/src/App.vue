@@ -1,18 +1,36 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { ref } from "vue";
 import { provideWebClient } from "@/providers/apiClientProvider";
 import CitySearch from "./components/CitySearch.vue";
+import WeatherDashboard from "./components/WeatherDashboard.vue";
+import type { Location } from "weather-client";
+
 provideWebClient();
+
+const selectedLocation = ref<Location | null>(null);
 </script>
 
 <template>
-  <div>
-    <CitySearch />
+  <div class="app">
+    <h1>Weather Forecast</h1>
+    <CitySearch v-model="selectedLocation" />
+    <WeatherDashboard :location="selectedLocation" />
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #42b883;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
