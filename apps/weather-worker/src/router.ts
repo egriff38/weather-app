@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-
+import { weatherRouter } from "./weather-router";
 if (!process.env.WEB_ORIGIN) {
   throw new Error("WEB_ORIGIN is not set");
 }
@@ -18,6 +18,7 @@ export const app = new Hono()
   )
   .get("/", (c) => {
     return c.text("Hello Hono!!");
-  });
+  })
+  .route("/weather", weatherRouter);
 
 export type AppSession = typeof app;

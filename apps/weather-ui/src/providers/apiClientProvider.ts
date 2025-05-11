@@ -1,7 +1,7 @@
 import { provide, type InjectionKey, inject } from "vue";
 import { createClient, type WeatherClient } from "weather-client";
 
-const WEATHER_CLIENT_INJECT_KEY: InjectionKey<WeatherClient> = Symbol(
+export const WEATHER_CLIENT_INJECT_KEY: InjectionKey<WeatherClient> = Symbol(
   "WEATHER_CLIENT_INJECT_KEY"
 );
 export const provideWebClient = () =>
