@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { onWatcherCleanup, ref, watch, nextTick, shallowRef } from "vue";
 import { useWebClient } from "@/providers/apiClientProvider";
+import type { Location } from "weather-client";
 
-interface City {
-  name: string;
-  country: string;
-  state?: string;
-}
-
-const selectedLocation = defineModel<City | null>();
+const selectedLocation = defineModel<Location | null>();
 
 const searchQuery = ref("");
-const searchResults = shallowRef<City[]>([]);
+const searchResults = shallowRef<Location[]>([]);
 const isLoading = ref(false);
 const selectedIndex = ref(-1);
 const searchInput = shallowRef<HTMLInputElement | null>(null);
@@ -32,7 +27,6 @@ const maintainFocus = async () => {
 const searchCities = async (query: string, signal?: AbortSignal) => {
   if (!query.trim()) {
     searchResults.value = [];
-    selectedIndex.value = -1;
     return;
   }
 
@@ -47,17 +41,8 @@ const searchCities = async (query: string, signal?: AbortSignal) => {
         },
       }
     );
-    const data = await response.json();
 
-    if ("error" in data) {
-      console.error("API error:", data.error);
-      searchResults.value = [];
-      selectedIndex.value = -1;
-      return;
-    }
-
-    searchResults.value = data;
-    selectedIndex.value = -1;
+    searchResults.value = await response.json();
     await maintainFocus();
   } catch (error) {
     console.error("Error searching cities:", error);
@@ -84,6 +69,9 @@ watch(searchQuery, (newQuery) => {
 
 watch(selectedLocation, () => {
   searchQuery.value = "";
+});
+watch(searchResults, (newResults) => {
+  selectedIndex.value = newResults.length ? 0 : -1;
 });
 
 const handleKeyDown = (event: KeyboardEvent) => {

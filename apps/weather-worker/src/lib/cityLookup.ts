@@ -2,32 +2,31 @@ import { OpenWeatherAPI, Location, Options } from "openweather-api-node";
 import { HTTPException } from "hono/http-exception";
 import { useWeatherService } from "./services";
 
-export class CityLookup {
-  constructor(private readonly ow: OpenWeatherAPI = useWeatherService()) {}
+export function isZip(cityOrZip: string) {
+  return /^\d{5}$/.test(cityOrZip);
+}
 
-  async lookupCity(cityOrZip: string) {
-    if (CityLookup.isZip(cityOrZip)) {
-      const res = await this.ow.getLocation({
+export async function searchCity(
+  cityOrZip: string,
+  ow: OpenWeatherAPI = useWeatherService()
+): Promise<Location[]> {
+  if (isZip(cityOrZip)) {
+    try {
+      const res = await ow.getLocation({
         zipCode: cityOrZip,
       });
       if (res) {
-        return [new City(res)];
+        return [res];
       }
-    }
-    const res = await this.ow.getAllLocations(cityOrZip, {});
-    return res.map((city) => new City(city));
-  }
-  async getCity(opts: Options) {
-    const res = await this.ow.getLocation(opts);
-    if (!res)
+    } catch (e) {
       throw new HTTPException(404, {
-        message: "City not found",
+        message: `City not found with zip code ${cityOrZip}`,
+        cause: e,
       });
-    return new City(res);
+    }
   }
-  static isZip(cityOrZip: string) {
-    return /^\d{5}$/.test(cityOrZip);
-  }
+  const res = await ow.getAllLocations(cityOrZip, {});
+  return res;
 }
 
 export class City {
@@ -57,8 +56,12 @@ export class City {
     });
     return res[0];
   }
-  static from(opts: Options, ow: OpenWeatherAPI = useWeatherService()) {
-    const lookup = new CityLookup(ow);
-    return lookup.getCity(opts);
+  static async from(opts: Options, ow: OpenWeatherAPI = useWeatherService()) {
+    const res = await ow.getLocation(opts);
+    if (!res)
+      throw new HTTPException(404, {
+        message: "City not found",
+      });
+    return new City(res);
   }
 }
