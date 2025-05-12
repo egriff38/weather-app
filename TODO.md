@@ -24,7 +24,8 @@ These items are updates I intend to make now that the main application has reach
 - [ ] Add a button to pull current location
 
 ## Documentation
-- [ ] Add an explanation of the RPC + Types / workspaces pattern
-- [ ] Add a setup guide for all of the dependencies not included in pnpm (aws, op, etc.)
-- [ ] Add an example env file, or a shell script that prompts the user to get the stuff to build one
-- [ ] Add link to website at the top of the README
+- [x] Add an explanation of the RPC + Types / workspaces pattern
+- [x] ~~Add a setup guide for all of the dependencies not included in pnpm (aws, op, etc.)~~ (Not needed)
+- [x] Add an example env file, or a shell script that prompts the user to get the stuff to build one
+- [x] Add link to website at the top of the README
+- [x] Explain the patch for openweather-api-node
