@@ -1,5 +1,5 @@
 diff --git a/dist/request.js b/dist/request.js
-index bde03bb5daa16e077ea271d9ceccd3b17c253e40..fb6dd5c6ea87732cab3040525787f86f58bbbfc5 100644
+index bde03bb5daa16e077ea271d9ceccd3b17c253e40..cea71836c20ce7c5aac391a30b5cdbb904af6c0e 100644
 --- a/dist/request.js
 +++ b/dist/request.js
 @@ -29,33 +29,10 @@ const inNode = typeof process !== "undefined" &&
@@ -7,7 +7,8 @@ index bde03bb5daa16e077ea271d9ceccd3b17c253e40..fb6dd5c6ea87732cab3040525787f86f
      process.versions.node != null;
  async function get(url) {
 -    if (inBrowser) {
-         const response = await window.fetch(url);
+-        const response = await window.fetch(url);
++        const response = await fetch(url);
          return {
              status: response.status,
              data: await response.json(),
