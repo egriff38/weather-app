@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm run -r --parallel dev",
     "build": "pnpm run -r build",
-    "deploy": "pnpm run -r deploy"
+    "deploy": "pnpm run -r deploy",
+    "gen-env": "node gen-env.mjs"
   },
   "keywords": [],
   "author": "",
