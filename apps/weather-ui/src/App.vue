@@ -39,7 +39,6 @@ const bgSecondary = "#589eac";
         rel="noopener noreferrer"
         class="github-link"
       >
-        <!-- <Icon icon="mdi:github" class="github-icon" /> -->
         <i-mdi-github class="github-icon" />
       </a>
     </div>
