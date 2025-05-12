@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watchEffect, computed } from "vue";
 import { useWebClient } from "@/providers/apiClientProvider";
 import type { Location } from "weather-client";
+import type { UnitSystem } from "./UnitSelector.vue";
 import type { SerializedForecastWeather } from "@/types/weather";
 import iWiDaySunny from "virtual:icons/wi/day-sunny";
 import iWiNightClear from "virtual:icons/wi/night-clear";
@@ -18,6 +19,7 @@ import iWiSunset from "virtual:icons/wi/sunset";
 
 const props = defineProps<{
   location: Location | null;
+  unit: UnitSystem;
 }>();
 
 const forecast = ref<SerializedForecastWeather>();
@@ -43,6 +45,7 @@ const fetchWeather = async () => {
       query: {
         lat: props.location.lat.toString(),
         lon: props.location.lon.toString(),
+        units: props.unit,
       },
     });
     const data = await response.json();
@@ -56,7 +59,7 @@ const fetchWeather = async () => {
   }
 };
 
-watch(() => props.location, fetchWeather, { immediate: true });
+watchEffect(fetchWeather);
 
 const getWeatherIcon = computed(() => {
   if (!forecast.value) return iWiDaySunny;
@@ -73,6 +76,25 @@ const getWeatherIcon = computed(() => {
   if (desc.includes("fog") || desc.includes("mist")) return iWiFog;
 
   return iWiDaySunny;
+});
+const tempIndicator = computed(() => {
+  switch (props.unit) {
+    case "metric":
+      return "°C";
+    case "imperial":
+      return "°F";
+    case "standard":
+      return "K";
+  }
+});
+
+const windSpeedIndicator = computed(() => {
+  switch (props.unit) {
+    case "imperial":
+      return "mph";
+    default:
+      return "m/s";
+  }
 });
 
 const formatTime = (timestamp: number) => {
@@ -111,10 +133,11 @@ const formatDate = (timestamp: number) => {
         <div class="card-content">
           <div class="card-title">Current Weather</div>
           <div class="card-value temperature">
-            {{ Math.round(forecast.weather.temp.cur) }}°C
+            {{ Math.round(forecast.weather.temp.cur) + tempIndicator }}
           </div>
           <div class="card-value feels-like">
-            Feels like {{ Math.round(forecast.weather.feelsLike.cur) }}°C
+            Feels like
+            {{ Math.round(forecast.weather.feelsLike.cur) + tempIndicator }}
           </div>
           <div class="card-value description">
             {{ forecast.weather.description }}
@@ -136,7 +159,10 @@ const formatDate = (timestamp: number) => {
               </div>
               <div class="condition-item">
                 <i-wi-strong-wind class="icon" />
-                <span>{{ Math.round(forecast.weather.wind.speed) }} m/s</span>
+                <span
+                  >{{ Math.round(forecast.weather.wind.speed) }}
+                  {{ windSpeedIndicator }}
+                </span>
               </div>
               <div class="condition-item">
                 <i-wi-barometer class="icon" />

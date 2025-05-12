@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watchEffect } from "vue";
 import { provideWebClient } from "@/providers/apiClientProvider";
-import { useTitle } from "@vueuse/core";
+import { useTitle, useStorage } from "@vueuse/core";
 import CitySearch from "./components/CitySearch.vue";
 import WeatherDashboard from "./components/WeatherDashboard.vue";
+import UnitSelector from "./components/UnitSelector.vue";
 import type { Location } from "weather-client";
+import type { UnitSystem } from "./components/UnitSelector.vue";
 import iMdiGithub from "virtual:icons/mdi/github";
 
 provideWebClient();
 
 const selectedLocation = ref<Location | null>(null);
+const selectedUnit = useStorage<UnitSystem>(
+  "weather-unit",
+  "imperial",
+  sessionStorage
+);
 const title = useTitle("Weather Forecast");
 
 // Update title when location changes
-watch(selectedLocation, (location) => {
-  if (location) {
-    title.value = `${location.name} - Weather Forecast`;
+watchEffect(() => {
+  if (selectedLocation.value) {
+    title.value = `${selectedLocation.value.name} - Weather Forecast`;
   } else {
     title.value = "Weather Forecast";
   }
@@ -33,9 +40,10 @@ const bgSecondary = "#589eac";
     <div class="header">
       <h1>Weather Forecast</h1>
       <CitySearch v-model="selectedLocation" />
+      <UnitSelector v-model="selectedUnit" />
     </div>
     <div class="dashboard-container">
-      <WeatherDashboard :location="selectedLocation" />
+      <WeatherDashboard :location="selectedLocation" :unit="selectedUnit" />
     </div>
   </div>
   <a
@@ -170,5 +178,12 @@ h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
   }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 </style>

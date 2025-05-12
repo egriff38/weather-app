@@ -17,6 +17,7 @@ These items are updates I intend to make now that the main application has reach
 - [ ] Allow Vueuse's `useFavicon()` to set the favicon image to an icon and color reflecting the weather and time-of-day respectively.
 
 ## UX
+- [x] Add a selector for unit type
 - [ ] Add a slider for time of day (should fetch new forecasts)
 - [ ] Put the whole view in a carousel to view multiple locations
 - [ ] Add the ability to save multiple locations, either to browser storage, or...

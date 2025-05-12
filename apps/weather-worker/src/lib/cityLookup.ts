@@ -1,4 +1,9 @@
-import { OpenWeatherAPI, Location, Options } from "openweather-api-node";
+import {
+  OpenWeatherAPI,
+  Location,
+  Options,
+  Unit as UnitSystem,
+} from "openweather-api-node";
 import { HTTPException } from "hono/http-exception";
 import { useWeatherService } from "./services";
 
@@ -47,12 +52,16 @@ export class City {
     };
   }
 
-  async getWeather(ow: OpenWeatherAPI = useWeatherService()) {
+  async getWeather(
+    units?: UnitSystem,
+    ow: OpenWeatherAPI = useWeatherService()
+  ) {
     const res = await ow.getForecast(1, {
       coordinates: {
         lat: this.coordinates.latitude,
         lon: this.coordinates.longitude,
       },
+      units,
     });
     return res[0];
   }
