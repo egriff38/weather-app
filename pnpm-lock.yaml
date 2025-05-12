@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  openweather-api-node@3.1.5:
+    hash: 6aa6ce19a95ff733b9de23e192bd7a8ba1d5a5cd471ab0089d97ea44bd7f720a
+    path: patches/openweather-api-node@3.1.5.patch
+
 importers:
 
   .: {}
@@ -49,7 +54,7 @@ importers:
         version: 4.7.8
       openweather-api-node:
         specifier: ^3.1.5
-        version: 3.1.5
+        version: 3.1.5(patch_hash=6aa6ce19a95ff733b9de23e192bd7a8ba1d5a5cd471ab0089d97ea44bd7f720a)
       typedash:
         specifier: ^3.2.5
         version: 3.2.5
@@ -2566,7 +2571,7 @@ snapshots:
       shell-quote: 1.8.2
       which: 3.0.1
 
-  openweather-api-node@3.1.5: {}
+  openweather-api-node@3.1.5(patch_hash=6aa6ce19a95ff733b9de23e192bd7a8ba1d5a5cd471ab0089d97ea44bd7f720a): {}
 
   path-browserify@1.0.1: {}
 
