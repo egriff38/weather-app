@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { provideWebClient } from "@/providers/apiClientProvider";
+import { useTitle } from "@vueuse/core";
 import CitySearch from "./components/CitySearch.vue";
 import WeatherDashboard from "./components/WeatherDashboard.vue";
 import type { Location } from "weather-client";
@@ -8,6 +9,16 @@ import type { Location } from "weather-client";
 provideWebClient();
 
 const selectedLocation = ref<Location | null>(null);
+const title = useTitle("Weather Forecast");
+
+// Update title when location changes
+watch(selectedLocation, (location) => {
+  if (location) {
+    title.value = `${location.name} - Weather Forecast`;
+  } else {
+    title.value = "Weather Forecast";
+  }
+});
 </script>
 
 <template>

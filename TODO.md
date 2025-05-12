@@ -7,7 +7,7 @@ These items are updates I intend to make now that the main application has reach
 - [ ] Add e2e tests to the top level of the project, to verify user interactions work with playwright
 
 ## UI Style
-- [ ] Current City should show in title (use vueuse's `useTitle()`) composable with the current city
+- [x] Current City should show in title (use vueuse's `useTitle()`) composable with the current city
 - [ ] Current City should be shown in the CitySearch box when selected, and styling should be more prominent to show that it is the currently selected item rather than a text input
 - [ ] Update style: Dashboard should be a frosted pane with a collection of cards styled with [nuomorphism](https://neumorphism.io).
 - [ ] Add Icons to the various panes to reflect the weather conditions (consider [weather-icons](https://www.npmjs.com/package/@iconify-json/wi) with [unplugin-icons](https://github.com/unplugin/unplugin-icons))
