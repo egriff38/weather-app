@@ -174,7 +174,7 @@ const formatDate = (timestamp: number) => {
 .weather-dashboard {
   width: 100%;
   max-width: 1200px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 0 1rem;
 }
 
@@ -197,7 +197,7 @@ const formatDate = (timestamp: number) => {
 .forecast-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
   padding: 2rem;
   background: var(--bg-primary);
   border-radius: 24px;
@@ -211,11 +211,11 @@ const formatDate = (timestamp: number) => {
 .weather-card {
   background: var(--bg-primary);
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: 8px 8px 16px var(--bg-secondary), -8px -8px 16px var(--bg-primary);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .main-weather {
@@ -311,12 +311,52 @@ const formatDate = (timestamp: number) => {
 .bottom-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
+  .weather-dashboard {
+    padding: 0 0.25rem;
+    margin: 0.5rem 0;
+  }
+  .forecast-grid {
+    padding: 0.5rem 0.1rem;
+    gap: 1.2rem;
+  }
+  .main-weather {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.2rem;
+    gap: 1.2rem;
+  }
+  .weather-icon .icon {
+    width: 4.2rem;
+    height: 4.2rem;
+  }
+  .card-title {
+    font-size: 1rem;
+  }
+  .temperature {
+    font-size: 2rem;
+  }
+  .description {
+    font-size: 1.1rem;
+  }
+  .date {
+    font-size: 0.9rem;
+  }
   .bottom-cards {
     grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .weather-card {
+    padding: 1.2rem;
+    gap: 1.2rem;
+  }
+  .condition-item .icon,
+  .sun-time .icon {
+    width: 1.3rem;
+    height: 1.3rem;
   }
 }
 </style>

@@ -93,9 +93,10 @@ body {
 
 <style scoped>
 .app {
+  width: fit-content;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
@@ -146,5 +147,29 @@ h1 {
 .github-icon {
   width: 2rem;
   height: 2rem;
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 0.5rem 1rem;
+    min-width: 0;
+  }
+  .header {
+    margin-bottom: 1rem;
+    padding-top: 1.5rem;
+    position: relative;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .github-link {
+    top: 1rem;
+    right: 1rem;
+  }
+  .github-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 }
 </style>
