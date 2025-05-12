@@ -93,10 +93,10 @@ const formatDate = (timestamp: number) => {
 
 <template>
   <div class="weather-dashboard">
-    <div v-if="!location" class="no-location">
+    <!-- <div v-if="!location" class="no-location">
       Select a location to view weather data
-    </div>
-    <div v-else-if="error" class="error">
+    </div> -->
+    <div v-if="error" class="error">
       {{ error }}
     </div>
     <div
