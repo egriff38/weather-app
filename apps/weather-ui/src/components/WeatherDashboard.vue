@@ -71,7 +71,7 @@ watch(() => props.location, fetchWeather, { immediate: true });
         </div>
       </div>
 
-      <div class="weather-card">
+      <div class="weather-card temperature">
         <div class="card-title">Temperature</div>
         <div class="card-value">
           {{ Math.round(forecast.weather.temp.cur) }}°C
@@ -161,20 +161,27 @@ watch(() => props.location, fetchWeather, { immediate: true });
 .error {
   text-align: center;
   padding: 2rem;
-  color: #666;
   font-size: 1.2rem;
+  background: var(--bg-primary);
+  border-radius: 50px;
+  box-shadow: 20px 20px 60px var(--bg-secondary),
+    -20px -20px 60px var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .error {
-  color: #dc3545;
+  color: var(--text-error);
 }
 
 .forecast-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  padding: 1rem;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: var(--bg-primary);
+  border-radius: 24px;
   transition: opacity 0.3s ease;
+  min-width: 800px;
 }
 
 .forecast-grid.is-loading {
@@ -184,36 +191,40 @@ watch(() => props.location, fetchWeather, { immediate: true });
 @media (max-width: 1024px) {
   .forecast-grid {
     grid-template-columns: repeat(3, 1fr);
+    min-width: 600px;
   }
 }
 
 @media (max-width: 768px) {
   .forecast-grid {
     grid-template-columns: repeat(2, 1fr);
+    min-width: 400px;
   }
 }
 
 @media (max-width: 480px) {
   .forecast-grid {
     grid-template-columns: 1fr;
+    min-width: 300px;
   }
 }
 
 .weather-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--bg-primary);
+  border-radius: 50px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   min-width: 0;
+  box-shadow: 20px 20px 60px var(--bg-secondary),
+    -20px -20px 60px var(--bg-primary);
 }
 
 .card-title {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #666;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -221,14 +232,14 @@ watch(() => props.location, fetchWeather, { immediate: true });
 .card-value {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .temperature .card-value {
-  color: #42b883;
+  color: var(--text-primary);
   font-size: 2rem;
 }
 </style>

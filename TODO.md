@@ -9,7 +9,7 @@ These items are updates I intend to make now that the main application has reach
 ## UI Style
 - [x] Current City should show in title (use vueuse's `useTitle()`) composable with the current city
 - [x] Current City should be shown in the CitySearch box when selected, and styling should be more prominent to show that it is the currently selected item rather than a text input
-- [ ] Update style: Dashboard should be a frosted pane with a collection of cards styled with [nuomorphism](https://neumorphism.io).
+- [x] Update style: Dashboard should be a frosted pane with a collection of cards styled with [nuomorphism](https://neumorphism.io).
 - [ ] Add Icons to the various panes to reflect the weather conditions (consider [weather-icons](https://www.npmjs.com/package/@iconify-json/wi) with [unplugin-icons](https://github.com/unplugin/unplugin-icons))
 - [ ] Change the color of the page to reflect the overcast + time of day/night
 - [ ] Change the direction of the shadows for the cards based on the time of day

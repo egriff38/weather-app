@@ -201,35 +201,72 @@ const startEditing = () => {
 
 .search-input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 1.25rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--bg-primary);
+  border: 1px solid var(--bg-secondary);
+  border-radius: 50px;
   outline: none;
-  transition: border-color 0.2s;
+  color: var(--text-primary);
+  box-shadow: 15px 15px 30px var(--bg-secondary),
+    -15px -15px 30px var(--bg-primary);
+  transition: box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
 .search-input:focus {
-  border-color: #42b883;
+  box-shadow: 20px 20px 40px var(--bg-secondary),
+    -20px -20px 40px var(--bg-primary);
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
 }
 
 .search-input:disabled {
-  background-color: #f5f5f5;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
 .results-container {
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--bg-primary);
+  border: 1px solid var(--bg-secondary);
+  border-radius: 24px;
+  box-shadow: 15px 15px 30px var(--bg-secondary),
+    -15px -15px 30px var(--bg-primary);
   position: absolute;
   width: 100%;
   z-index: 10;
+  margin-top: 0.5rem;
+  overflow: auto;
+  box-sizing: border-box;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar for results container only */
+.results-container::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.results-container::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 6px;
+}
+
+.results-container::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--bg-primary);
+}
+
+.results-container::-webkit-scrollbar-thumb:hover {
+  background: #4a8a98;
 }
 
 .results-list {
   list-style: none;
-  padding: 0;
+  padding: 0.5rem;
   margin: 0;
   max-height: 300px;
   overflow-y: auto;
@@ -238,12 +275,14 @@ const startEditing = () => {
 .result-item {
   padding: 0.75rem 1rem;
   cursor: pointer;
+  border-radius: 16px;
   transition: background-color 0.2s;
+  color: var(--text-primary);
 }
 
 .result-item:hover,
 .result-item.selected {
-  background-color: #f5f5f5;
+  background: var(--bg-secondary);
 }
 
 .city-info {
@@ -254,23 +293,23 @@ const startEditing = () => {
 
 .city-name {
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .city-details {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9em;
 }
 
 .loading {
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
   padding: 1rem;
 }
 
 .no-results {
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
   padding: 1rem;
 }
 
@@ -278,17 +317,20 @@ const startEditing = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
-  background-color: #42b883;
-  color: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-secondary);
+  border-radius: 50px;
+  box-shadow: 15px 15px 30px var(--bg-secondary),
+    -15px -15px 30px var(--bg-primary);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: box-shadow 0.2s ease;
 }
 
 .selected-city:hover {
-  background-color: #3aa876;
+  box-shadow: 20px 20px 40px var(--bg-secondary),
+    -20px -20px 40px var(--bg-primary);
 }
 
 .selected-city .city-info {
@@ -296,20 +338,20 @@ const startEditing = () => {
 }
 
 .selected-city .city-name {
-  color: white;
+  color: var(--text-primary);
   font-size: 1.1rem;
   font-weight: 600;
 }
 
 .selected-city .city-details {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .clear-button {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-primary);
   font-size: 1.5rem;
   padding: 0 0.5rem;
   cursor: pointer;

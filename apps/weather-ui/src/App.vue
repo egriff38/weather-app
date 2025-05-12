@@ -19,10 +19,16 @@ watch(selectedLocation, (location) => {
     title.value = "Weather Forecast";
   }
 });
+
+const bgPrimary = "#68baca";
+const bgSecondary = "#589eac";
 </script>
 
 <template>
-  <div class="app">
+  <div
+    class="app"
+    :style="{ '--bg-primary': bgPrimary, '--bg-secondary': bgSecondary }"
+  >
     <div class="header">
       <h1>Weather Forecast</h1>
       <CitySearch v-model="selectedLocation" />
@@ -33,6 +39,49 @@ watch(selectedLocation, (location) => {
   </div>
 </template>
 
+<style>
+:root {
+  --bg-primary: #68baca;
+  --bg-secondary: #589eac;
+  --text-primary: white;
+  --text-secondary: rgba(255, 255, 255, 0.9);
+  --text-error: #ff6b6b;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border: 2px solid var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a8a98;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-secondary) var(--bg-primary);
+}
+</style>
+
 <style scoped>
 .app {
   max-width: 1200px;
@@ -40,6 +89,7 @@ watch(selectedLocation, (location) => {
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
 }
 
 .header {
@@ -49,7 +99,7 @@ watch(selectedLocation, (location) => {
 h1 {
   text-align: center;
   margin-bottom: 2rem;
-  color: #42b883;
+  color: var(--text-primary);
 }
 
 .dashboard-container {
