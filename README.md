@@ -2,6 +2,8 @@
 
 This is a monorepo for a weather application built with Vue 3, TypeScript, and Vite.
 
+🌐 [Live Demo](https://weather-forecast.eshin-griffith.com/)
+
 ## Project Structure
 
 - `apps/weather-ui`: Frontend Vue 3 application

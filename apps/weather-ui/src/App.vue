@@ -5,6 +5,7 @@ import { useTitle } from "@vueuse/core";
 import CitySearch from "./components/CitySearch.vue";
 import WeatherDashboard from "./components/WeatherDashboard.vue";
 import type { Location } from "weather-client";
+import iMdiGithub from "virtual:icons/mdi/github";
 
 provideWebClient();
 
@@ -32,6 +33,15 @@ const bgSecondary = "#589eac";
     <div class="header">
       <h1>Weather Forecast</h1>
       <CitySearch v-model="selectedLocation" />
+      <a
+        href="https://github.com/egriff38/weather-app"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-link"
+      >
+        <!-- <Icon icon="mdi:github" class="github-icon" /> -->
+        <i-mdi-github class="github-icon" />
+      </a>
     </div>
     <div class="dashboard-container">
       <WeatherDashboard :location="selectedLocation" />
@@ -119,5 +129,23 @@ h1 {
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+.github-link {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: transform 0.1s ease;
+}
+
+.github-link:hover {
+  transform: scale(1.1);
+}
+
+.github-icon {
+  width: 2rem;
+  height: 2rem;
 }
 </style>
