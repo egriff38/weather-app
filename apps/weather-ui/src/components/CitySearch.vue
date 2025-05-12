@@ -10,6 +10,7 @@ const searchResults = shallowRef<Location[]>([]);
 const isLoading = ref(false);
 const selectedIndex = ref(-1);
 const searchInput = shallowRef<HTMLInputElement | null>(null);
+const isEditing = ref(false);
 
 const {
   weather: {
@@ -75,6 +76,20 @@ watch(searchResults, (newResults) => {
 });
 
 const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    if (isEditing.value) {
+      isEditing.value = false;
+      searchQuery.value = "";
+      searchResults.value = [];
+      selectedIndex.value = -1;
+    } else {
+      searchResults.value = [];
+      selectedIndex.value = -1;
+    }
+    return;
+  }
+
   if (!searchResults.value.length) return;
 
   switch (event.key) {
@@ -94,25 +109,51 @@ const handleKeyDown = (event: KeyboardEvent) => {
       if (selectedIndex.value >= 0) {
         const selectedCity = searchResults.value[selectedIndex.value];
         selectedLocation.value = selectedCity;
+        isEditing.value = false;
       }
       break;
-    case "Escape":
-      event.preventDefault();
-      searchResults.value = [];
-      selectedIndex.value = -1;
-      break;
   }
+};
+
+const startEditing = () => {
+  isEditing.value = true;
+  nextTick(() => {
+    if (searchInput.value) {
+      searchInput.value.focus();
+    }
+  });
 };
 </script>
 
 <template>
   <div class="city-search">
     <div class="search-container">
+      <div
+        v-if="selectedLocation && !isEditing"
+        class="selected-city"
+        @click="startEditing"
+      >
+        <div class="city-info">
+          <span class="city-name">{{ selectedLocation.name }}</span>
+          <span class="city-details">
+            {{ selectedLocation.state ? `${selectedLocation.state}, ` : ""
+            }}{{ selectedLocation.country }}
+          </span>
+        </div>
+        <button class="clear-button" @click.stop="selectedLocation = null">
+          <span class="clear-icon">×</span>
+        </button>
+      </div>
       <input
+        v-else
         ref="searchInput"
         type="text"
         v-model="searchQuery"
-        placeholder="Search for a city..."
+        :placeholder="
+          selectedLocation
+            ? 'Search for another city...'
+            : 'Search for a city...'
+        "
         class="search-input"
         @keydown="handleKeyDown"
       />
@@ -125,7 +166,10 @@ const handleKeyDown = (event: KeyboardEvent) => {
           :key="`${city.name}-${city.country}`"
           class="result-item"
           :class="{ selected: index === selectedIndex }"
-          @mousedown.prevent="selectedLocation = city"
+          @mousedown.prevent="
+            selectedLocation = city;
+            isEditing = false;
+          "
           @mouseover="selectedIndex = index"
         >
           <div class="city-info">
@@ -228,5 +272,58 @@ const handleKeyDown = (event: KeyboardEvent) => {
   text-align: center;
   color: #666;
   padding: 1rem;
+}
+
+.selected-city {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background-color: #42b883;
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.selected-city:hover {
+  background-color: #3aa876;
+}
+
+.selected-city .city-info {
+  flex: 1;
+}
+
+.selected-city .city-name {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.selected-city .city-details {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.clear-button:hover {
+  opacity: 0.8;
+}
+
+.clear-icon {
+  line-height: 1;
 }
 </style>

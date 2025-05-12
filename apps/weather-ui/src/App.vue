@@ -23,9 +23,13 @@ watch(selectedLocation, (location) => {
 
 <template>
   <div class="app">
-    <h1>Weather Forecast</h1>
-    <CitySearch v-model="selectedLocation" />
-    <WeatherDashboard :location="selectedLocation" />
+    <div class="header">
+      <h1>Weather Forecast</h1>
+      <CitySearch v-model="selectedLocation" />
+    </div>
+    <div class="dashboard-container">
+      <WeatherDashboard :location="selectedLocation" />
+    </div>
   </div>
 </template>
 
@@ -34,12 +38,24 @@ watch(selectedLocation, (location) => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 2rem;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 2rem;
   color: #42b883;
+}
+
+.dashboard-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .logo {
