@@ -33,19 +33,19 @@ const bgSecondary = "#589eac";
     <div class="header">
       <h1>Weather Forecast</h1>
       <CitySearch v-model="selectedLocation" />
-      <a
-        href="https://github.com/egriff38/weather-app"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-link"
-      >
-        <i-mdi-github class="github-icon" />
-      </a>
     </div>
     <div class="dashboard-container">
       <WeatherDashboard :location="selectedLocation" />
     </div>
   </div>
+  <a
+    href="https://github.com/egriff38/weather-app"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="github-link"
+  >
+    <i-mdi-github class="github-icon" />
+  </a>
 </template>
 
 <style>
@@ -93,17 +93,13 @@ body {
 
 <style scoped>
 .app {
-  width: fit-content;
+  /* width: fit-content; */
   max-width: 1200px;
   margin: 0 auto;
-
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
-}
-
-.header {
-  margin-bottom: 2rem;
 }
 
 h1 {
@@ -149,27 +145,30 @@ h1 {
   height: 2rem;
 }
 
+@media (max-width: 960px) {
+  .github-link {
+    position: relative;
+    top: unset;
+    right: unset;
+    margin: 1rem auto;
+    display: block;
+  }
+  .github-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
 @media (max-width: 600px) {
   .app {
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     min-width: 0;
   }
   .header {
-    margin-bottom: 1rem;
-    padding-top: 1.5rem;
     position: relative;
   }
   h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
-  }
-  .github-link {
-    top: 1rem;
-    right: 1rem;
-  }
-  .github-icon {
-    width: 1.5rem;
-    height: 1.5rem;
   }
 }
 </style>
