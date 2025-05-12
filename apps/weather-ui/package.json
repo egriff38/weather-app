@@ -4,17 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "clean": "rm -rf dist",
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "build": "NODE_ENV=production vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "update": "op plugin run aws s3 sync dist/ s3://weather-ui-bucket-1 -- --delete",
+    "deploy": "run-s clean build update"
   },
   "dependencies": {
     "vue": "^3.5.13",
     "weather-client": "workspace:*"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.535.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
+    "npm-run-all2": "^6.2.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
     "vue-tsc": "^2.2.8"

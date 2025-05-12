@@ -53,6 +53,9 @@ To get started with this project:
    pnpm --filter weather-worker test
    ```
 
+6. **Deployment**
+   The application is deployed to AWS using the AWS CLI, with the connection configured using the [1Password AWS Shell Plugin](https://developer.1password.com/docs/cli/shell-plugins/aws/#reference).
+
 ## Available Scripts
 
 - `pnpm dev` - Start development servers for all packages

@@ -6,10 +6,11 @@
     "./lib": "./src/index.ts"
   },
   "scripts": {
-    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/handler.ts --format=esm",
-    "zip": "zip -j lambda.zip dist/index.js",
-    "update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name weather-worker",
-    "deploy": "run-s build zip update",
+    "build": "esbuild --bundle --outfile=./dist/index.mjs --platform=node --target=node20 ./src/handler.ts --format=esm",
+    "zip": "zip -j lambda.zip dist/index.mjs",
+    "update": "op plugin run aws lambda update-function-code -- --zip-file fileb://lambda.zip --function-name weather-worker",
+    "clean": "rm -rf dist lambda.zip",
+    "deploy": "run-s clean build zip update",
     "dev": "tsx watch src/dev.ts",
     "interactive": "tsx -r dotenv/config --import ./src/interactive.ts"
   },
