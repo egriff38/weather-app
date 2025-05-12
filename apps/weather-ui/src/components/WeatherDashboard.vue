@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useWebClient } from "@/providers/apiClientProvider";
 import type { Location } from "weather-client";
 import type { SerializedForecastWeather } from "@/types/weather";
+import iWiDaySunny from "virtual:icons/wi/day-sunny";
+import iWiNightClear from "virtual:icons/wi/night-clear";
+import iWiCloudy from "virtual:icons/wi/cloudy";
+import iWiRain from "virtual:icons/wi/rain";
+import iWiSnow from "virtual:icons/wi/snow";
+import iWiThunderstorm from "virtual:icons/wi/thunderstorm";
+import iWiFog from "virtual:icons/wi/fog";
+import iWiHumidity from "virtual:icons/wi/humidity";
+import iWiStrongWind from "virtual:icons/wi/strong-wind";
+import iWiBarometer from "virtual:icons/wi/barometer";
+import iWiSunrise from "virtual:icons/wi/sunrise";
+import iWiSunset from "virtual:icons/wi/sunset";
 
 const props = defineProps<{
   location: Location | null;
@@ -45,6 +57,38 @@ const fetchWeather = async () => {
 };
 
 watch(() => props.location, fetchWeather, { immediate: true });
+
+const getWeatherIcon = computed(() => {
+  if (!forecast.value) return iWiDaySunny;
+
+  const desc = forecast.value.weather.description.toLowerCase();
+  const hour = new Date().getHours();
+  const isNight = hour < 6 || hour > 18;
+
+  if (desc.includes("clear")) return isNight ? iWiNightClear : iWiDaySunny;
+  if (desc.includes("cloud")) return iWiCloudy;
+  if (desc.includes("rain")) return iWiRain;
+  if (desc.includes("snow")) return iWiSnow;
+  if (desc.includes("thunder")) return iWiThunderstorm;
+  if (desc.includes("fog") || desc.includes("mist")) return iWiFog;
+
+  return iWiDaySunny;
+});
+
+const formatTime = (timestamp: number) => {
+  return new Date(timestamp * 1000).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const formatDate = (timestamp: number) => {
+  return new Date(timestamp * 1000).toLocaleDateString([], {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+};
 </script>
 
 <template>
@@ -60,89 +104,66 @@ watch(() => props.location, fetchWeather, { immediate: true });
       class="forecast-grid"
       :class="{ 'is-loading': isLoading }"
     >
-      <div class="weather-card">
-        <div class="card-title">Date</div>
-        <div class="card-value">
-          {{
-            new Date(
-              forecast.astronomical.sunriseRaw * 1000
-            ).toLocaleDateString()
-          }}
+      <div class="weather-card main-weather">
+        <div class="weather-icon">
+          <component :is="getWeatherIcon" class="icon" />
+        </div>
+        <div class="card-content">
+          <div class="card-title">Current Weather</div>
+          <div class="card-value temperature">
+            {{ Math.round(forecast.weather.temp.cur) }}°C
+          </div>
+          <div class="card-value feels-like">
+            Feels like {{ Math.round(forecast.weather.feelsLike.cur) }}°C
+          </div>
+          <div class="card-value description">
+            {{ forecast.weather.description }}
+          </div>
+          <div class="card-value date">
+            {{ formatDate(forecast.astronomical.sunriseRaw) }}
+          </div>
         </div>
       </div>
 
-      <div class="weather-card temperature">
-        <div class="card-title">Temperature</div>
-        <div class="card-value">
-          {{ Math.round(forecast.weather.temp.cur) }}°C
+      <div class="bottom-cards">
+        <div class="weather-card conditions">
+          <div class="card-content">
+            <div class="card-title">Conditions</div>
+            <div class="conditions-grid">
+              <div class="condition-item">
+                <i-wi-humidity class="icon" />
+                <span>{{ forecast.weather.humidity }}%</span>
+              </div>
+              <div class="condition-item">
+                <i-wi-strong-wind class="icon" />
+                <span>{{ Math.round(forecast.weather.wind.speed) }} m/s</span>
+              </div>
+              <div class="condition-item">
+                <i-wi-barometer class="icon" />
+                <span>{{ forecast.weather.pressure }} hPa</span>
+              </div>
+              <div class="condition-item">
+                <i-wi-cloudy class="icon" />
+                <span>{{ forecast.weather.clouds }}%</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="weather-card">
-        <div class="card-title">Feels Like</div>
-        <div class="card-value">
-          {{ Math.round(forecast.weather.feelsLike.cur) }}°C
-        </div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Weather</div>
-        <div class="card-value">{{ forecast.weather.description }}</div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Humidity</div>
-        <div class="card-value">{{ forecast.weather.humidity }}%</div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Wind Speed</div>
-        <div class="card-value">
-          {{ Math.round(forecast.weather.wind.speed) }} m/s
-        </div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Wind Direction</div>
-        <div class="card-value">{{ forecast.weather.wind.deg }}°</div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Pressure</div>
-        <div class="card-value">{{ forecast.weather.pressure }} hPa</div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Clouds</div>
-        <div class="card-value">{{ forecast.weather.clouds }}%</div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Visibility</div>
-        <div class="card-value">
-          {{ forecast.weather.visibility / 1000 }} km
-        </div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Sunrise</div>
-        <div class="card-value">
-          {{
-            new Date(
-              forecast.astronomical.sunriseRaw * 1000
-            ).toLocaleTimeString()
-          }}
-        </div>
-      </div>
-
-      <div class="weather-card">
-        <div class="card-title">Sunset</div>
-        <div class="card-value">
-          {{
-            new Date(
-              forecast.astronomical.sunsetRaw * 1000
-            ).toLocaleTimeString()
-          }}
+        <div class="weather-card sun-times">
+          <div class="card-content">
+            <div class="card-title">Sun Times</div>
+            <div class="sun-times-grid">
+              <div class="sun-time">
+                <i-wi-sunrise class="icon" />
+                <span>{{ formatTime(forecast.astronomical.sunriseRaw) }}</span>
+              </div>
+              <div class="sun-time">
+                <i-wi-sunset class="icon" />
+                <span>{{ formatTime(forecast.astronomical.sunsetRaw) }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -175,71 +196,127 @@ watch(() => props.location, fetchWeather, { immediate: true });
 
 .forecast-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   gap: 1.5rem;
   padding: 2rem;
   background: var(--bg-primary);
   border-radius: 24px;
   transition: opacity 0.3s ease;
-  min-width: 800px;
 }
 
 .forecast-grid.is-loading {
   opacity: 0.5;
 }
 
-@media (max-width: 1024px) {
-  .forecast-grid {
-    grid-template-columns: repeat(3, 1fr);
-    min-width: 600px;
-  }
-}
-
-@media (max-width: 768px) {
-  .forecast-grid {
-    grid-template-columns: repeat(2, 1fr);
-    min-width: 400px;
-  }
-}
-
-@media (max-width: 480px) {
-  .forecast-grid {
-    grid-template-columns: 1fr;
-    min-width: 300px;
-  }
-}
-
 .weather-card {
   background: var(--bg-primary);
-  border-radius: 50px;
+  border-radius: 16px;
   padding: 1.5rem;
+  box-shadow: 8px 8px 16px var(--bg-secondary), -8px -8px 16px var(--bg-primary);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  min-width: 0;
-  box-shadow: 20px 20px 60px var(--bg-secondary),
-    -20px -20px 60px var(--bg-primary);
+  gap: 1rem;
+}
+
+.main-weather {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.weather-icon {
+  flex-shrink: 0;
+}
+
+.weather-icon .icon {
+  width: 8rem;
+  height: 8rem;
+  color: var(--text-primary);
+}
+
+.card-content {
+  flex: 1;
 }
 
 .card-title {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1.2rem;
   color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
 }
 
 .card-value {
-  font-size: 1.5rem;
-  font-weight: 600;
   color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.temperature .card-value {
+.temperature {
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.feels-like {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.description {
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  margin: 0.5rem 0;
+}
+
+.date {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.condition-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.condition-item .icon {
+  width: 2rem;
+  height: 2rem;
   color: var(--text-primary);
-  font-size: 2rem;
+}
+
+.sun-times-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sun-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sun-time .icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--text-primary);
+}
+
+.bottom-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .bottom-cards {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
